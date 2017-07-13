@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "976015699816",
+    "firebase_url": "https://chatapp-c18dc.firebaseio.com",
+    "project_id": "chatapp-c18dc",
+    "storage_bucket": "chatapp-c18dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976015699816:android:201eddc77866c9d6",
+        "android_client_info": {
+          "package_name": "com.PaperBag.ChatApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976015699816-j5j4n6l5iut4mh0g028od26mn92fnpnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3z2Xr4z0d_JS0M2fYTRCOlrEFuol7Mbo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

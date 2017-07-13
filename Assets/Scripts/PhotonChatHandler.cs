@@ -33,6 +33,8 @@ public class PhotonChatHandler : MonoBehaviour {
     void Awake()
     {
         PhotonNetwork.ConnectUsingSettings("v0.0.1");
+        //PhotonNetwork.logLevel = PhotonLogLevel.Full;
+        //PhotonNetwork.networkingPeer.DebugOut = ExitGames.Client.Photon.DebugLevel.INFO;
         roomName.text = "No room yet!";
         connectionState.text = "Not yet in a room!";
     }
@@ -48,6 +50,7 @@ public class PhotonChatHandler : MonoBehaviour {
         connectionState.text = PhotonNetwork.connectionStateDetailed.ToString();
 
         Log("Connection State: " + PhotonNetwork.connectionStateDetailed.ToString());
+        //print("Am i Master Client: " + PhotonNetwork.isMasterClient);
 
         if (!amIConnected && PhotonNetwork.connectedAndReady)
         {
@@ -129,6 +132,11 @@ public class PhotonChatHandler : MonoBehaviour {
         Log("I've left the room.");
         roomName.text = "No room yet!";
         LeavingTheRoom();
+    }
+
+    void OnDisconnectedFromPhoton()
+    {
+
     }
 
     public void SendMessage()
