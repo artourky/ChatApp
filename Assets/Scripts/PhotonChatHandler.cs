@@ -4,10 +4,13 @@ using UnityEngine.UI;
 // This is only a crude implementation of a chatting app we should use PhotonChat instead!
 public class PhotonChatHandler : MonoBehaviour {
 
+    #region UIFields
     public Text roomName;
     public Text connectionState;
     public Text playersNumber;
     public Text roomCreatedby;
+
+    private Text scrollText;
 
     public Button joinOrLeaveRoom;
     public Button sendMsg;
@@ -15,10 +18,9 @@ public class PhotonChatHandler : MonoBehaviour {
     public InputField myMsg;
 
     public ScrollRect scrollRect;
+    #endregion
 
     public PhotonView photonView;
-
-    Text scrollText;
 
     bool amIConnected = false;
     bool haveIpressedJoin = false;
@@ -33,8 +35,7 @@ public class PhotonChatHandler : MonoBehaviour {
     void Awake()
     {
         PhotonNetwork.ConnectUsingSettings("v0.0.1");
-        //PhotonNetwork.logLevel = PhotonLogLevel.Full;
-        //PhotonNetwork.networkingPeer.DebugOut = ExitGames.Client.Photon.DebugLevel.INFO;
+        PhotonNetwork.logLevel = PhotonLogLevel.Full;
         roomName.text = "No room yet!";
         connectionState.text = "Not yet in a room!";
     }
@@ -50,7 +51,7 @@ public class PhotonChatHandler : MonoBehaviour {
         connectionState.text = PhotonNetwork.connectionStateDetailed.ToString();
 
         Log("Connection State: " + PhotonNetwork.connectionStateDetailed.ToString());
-        //print("Am i Master Client: " + PhotonNetwork.isMasterClient);
+        Log("Am I the Master Client? " + PhotonNetwork.isMasterClient);
 
         if (!amIConnected && PhotonNetwork.connectedAndReady)
         {
@@ -70,16 +71,13 @@ public class PhotonChatHandler : MonoBehaviour {
         }
 	}
 
+    // This is a UI Button for Joining or Leaving the Room
     public void JoinOrLeaveRoom()
     {
         if (!haveIpressedJoin)
         {
             if (!PhotonNetwork.inRoom)
             {
-                //if (roomId != "")
-                //{
-                //    PhotonNetwork.JoinRoom(roomId);
-                //}
                 haveIpressedJoin = true;
                 joinOrLeaveRoom.GetComponentInChildren<Text>().text = "Leave Room";
                 Log("Joining Random Room!");
@@ -108,7 +106,6 @@ public class PhotonChatHandler : MonoBehaviour {
     void OnPhotonRandomJoinFailed()
     {
         Log("Random Room Fail!");
-        //roomId = "";
         roomCreatedby.text = "Room created by: Me!";
         PhotonNetwork.CreateRoom(null);
     }
@@ -117,7 +114,6 @@ public class PhotonChatHandler : MonoBehaviour {
     {
         Log("Joined A Room!");
         roomName.text = "eu/" + PhotonNetwork.room.Name;
-        //roomId = PhotonNetwork.room.Name;
 
         if (roomCreatedby.text == "")
         {
@@ -136,7 +132,7 @@ public class PhotonChatHandler : MonoBehaviour {
 
     void OnDisconnectedFromPhoton()
     {
-
+        Log("I got disconnected from Photon due to what?");
     }
 
     public void SendMessage()
