@@ -30,12 +30,18 @@ public class PhotonChatHandler : MonoBehaviour {
     string nickname = "Nickname";
     string roomId = "";
 
-    // TODO: Ask for a nickname before, check for peercreated status
+    // TODO: Ask for a Nickname before //, check for PeerCreated status << DONE
 
-    void Awake()
+    public static void ConnectToPhoton()
     {
         PhotonNetwork.ConnectUsingSettings("v0.0.1");
-        PhotonNetwork.logLevel = PhotonLogLevel.Full;
+    }
+    
+    void Awake()
+    {
+        //// WARNING: CROWDED CONSOLE!
+        //PhotonNetwork.logLevel = PhotonLogLevel.Full;
+        
         roomName.text = "No room yet!";
         connectionState.text = "Not yet in a room!";
     }
@@ -94,15 +100,6 @@ public class PhotonChatHandler : MonoBehaviour {
         }
     }
 
-    void LeavingTheRoom()
-    {
-        photonView.RPC("SomeoneLeft", PhotonTargets.Others);
-        haveIpressedJoin = false;
-        joinOrLeaveRoom.GetComponentInChildren<Text>().text = "Join Room";
-        PhotonNetwork.LeaveRoom();
-        joinOrLeaveRoom.interactable = true;
-    }
-
     void OnPhotonRandomJoinFailed()
     {
         Log("Random Room Fail!");
@@ -123,16 +120,37 @@ public class PhotonChatHandler : MonoBehaviour {
         myMsg.interactable = sendMsg.interactable = true;
     }
 
+    void LeavingTheRoom()
+    {
+        photonView.RPC("SomeoneLeft", PhotonTargets.Others);
+
+        PhotonNetwork.LeaveRoom();
+
+        ResetUI();
+    }
+
+    private void ResetUI()
+    {
+        haveIpressedJoin = false;
+
+        joinOrLeaveRoom.GetComponentInChildren<Text>().text = "Join Room";
+        joinOrLeaveRoom.interactable = true;
+    }
+
+    // Sometimes this get called due to random disconnection
     void OnLeftRoom()
     {
         Log("I've left the room.");
         roomName.text = "No room yet!";
-        LeavingTheRoom();
+
+        ResetUI();
     }
 
     void OnDisconnectedFromPhoton()
     {
         Log("I got disconnected from Photon due to what?");
+        Log("am I connected? " + PhotonNetwork.connectedAndReady);
+        amIConnected = false;
     }
 
     public void SendMessage()
