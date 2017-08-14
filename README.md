@@ -1,4 +1,5 @@
-- Now you can send a data or notification to a certain user. #Arsh @14/8/2017
+- Now you can send a data or notification to a certain user. 
+- I've had an idea on minimizing the work to create a room. #Arsh @14/8/2017
 
 #Basic Info
 > It's a chatting app using Photon and Firebase.

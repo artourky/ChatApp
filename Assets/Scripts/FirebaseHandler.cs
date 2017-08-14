@@ -4,15 +4,20 @@ using UnityEngine.Networking;
 
 public class FirebaseHandler : MonoBehaviour {
 
-    public static FirebaseHandler instanceFbHandler;
+    public static FirebaseHandler instanceFirebHandler;
 
     public string myToken = "";
 
+    public int secretCode = -1;
+
+    public bool amITheMaster = false;
+    public bool haveICr8edRoom = false;
+
     private void Awake()
     {
-        if (instanceFbHandler == null)
+        if (instanceFirebHandler == null)
         {
-            instanceFbHandler = this;
+            instanceFirebHandler = this;
         }
     }
 
@@ -32,7 +37,7 @@ public class FirebaseHandler : MonoBehaviour {
 
     public void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
     {
-        Log("Received a new message from: " + e.Message.From + " and the Message is I hope: " + e.Message);
+        Log("Received a new message from: " + e.Message.From + " and the Message is I hope: " + e.Message.Data["meetMe@"]);
     }
 
     public IEnumerator SendHttpReq(string to, string message, bool IsItANotification)
@@ -58,7 +63,9 @@ public class FirebaseHandler : MonoBehaviour {
 
         string dataMsg = "{ \"data\" : " +
             "{" +
-            
+            "\"meetMe@\":\"" + secretCode + "\"," +
+            "\"AmITheMaster\":\"" + amITheMaster + "\"" +
+            "\"HaveICr8edRoom\":\"" + haveICr8edRoom + "\"" +
             "}," +
             " \"to\" : \"" + to + "\" }";
 

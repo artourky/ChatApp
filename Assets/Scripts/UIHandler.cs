@@ -11,7 +11,9 @@ public class UIHandler : MonoBehaviour {
     public Text firebaseToken;
 
     public InputField friendToken;
+
     public Button callHim;
+    public Button answerChat;
 
     private void Awake()
     {
@@ -31,7 +33,7 @@ public class UIHandler : MonoBehaviour {
 
     public void FriendChat()
     {
-        Log("Friend Chat wooooooooooooooooah");
+        Log("Friend Chat woah");
 
         hideMe.SetActive(true);
     }
@@ -40,7 +42,16 @@ public class UIHandler : MonoBehaviour {
     {
         Log("Calling the friend " + friendToken.text);
 
-        StartCoroutine(FirebaseHandler.instanceFbHandler.SendHttpReq(friendToken.text, "test", true));
+        FirebaseHandler.instanceFirebHandler.secretCode = Random.Range(0, 256);
+        FirebaseHandler.instanceFirebHandler.amITheMaster = true;
+        StartCoroutine(FirebaseHandler.instanceFirebHandler.SendHttpReq(friendToken.text, null, false));
+    }
+
+    public void AnswerChat()
+    {
+        Log("Answering Chat Request");
+
+        // TODO: Reply to the (Caller) and let them that you are here // or should i just cr8 the room and w8 for them to join??
     }
 
     void Log(string msg)
