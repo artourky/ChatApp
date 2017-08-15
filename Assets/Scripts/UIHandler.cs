@@ -7,13 +7,16 @@ public class UIHandler : MonoBehaviour {
 
     public GameObject welcomePanel;
     public GameObject hideMe;
+    public GameObject signIn;
 
     public Text firebaseToken;
 
     public InputField friendToken;
+    public InputField nickName;
 
     public Button callHim;
     public Button answerChat;
+    public Button logIn;
 
     private void Awake()
     {
@@ -21,6 +24,15 @@ public class UIHandler : MonoBehaviour {
         {
             instanceUIHandler = this;
         }
+    }
+
+    public void LogIn()
+    {
+        PhotonChatHandler.nickname = nickName.text;
+        Log("My Name is: " + PhotonChatHandler.nickname);
+
+        FirebaseHandler.instanceFirebHandler.AddMeToDB();
+        signIn.SetActive(false);
     }
 
     public void RandomChat()
@@ -35,6 +47,7 @@ public class UIHandler : MonoBehaviour {
     {
         Log("Friend Chat woah");
 
+        FirebaseHandler.instanceFirebHandler.GetFriendFromDB();
         hideMe.SetActive(true);
     }
 
@@ -44,7 +57,7 @@ public class UIHandler : MonoBehaviour {
 
         FirebaseHandler.instanceFirebHandler.secretCode = Random.Range(0, 256);
         FirebaseHandler.instanceFirebHandler.amITheMaster = true;
-        StartCoroutine(FirebaseHandler.instanceFirebHandler.SendHttpReq(friendToken.text, null, false));
+        StartCoroutine(FirebaseHandler.instanceFirebHandler.SendHttpReq(FirebaseHandler.instanceFirebHandler.friendToken, null, false));
     }
 
     public void AnswerChat()

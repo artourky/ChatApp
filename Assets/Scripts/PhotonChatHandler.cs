@@ -4,6 +4,8 @@ using UnityEngine.UI;
 // This is only a crude implementation of a chatting app we should use PhotonChat instead!
 public class PhotonChatHandler : MonoBehaviour {
 
+    public static string nickname = "";
+
     #region UIFields
     public Text roomName;
     public Text connectionState;
@@ -27,7 +29,6 @@ public class PhotonChatHandler : MonoBehaviour {
 
     int msgsNumber = 0;
 
-    string nickname = "Nickname";
     string roomId = "";
 
     // TODO: Ask for a Nickname before //, check for PeerCreated status << DONE

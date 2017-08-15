@@ -1,17 +1,32 @@
-﻿using UnityEngine;
+﻿using Firebase;
+using UnityEngine;
+using Firebase.Database;
 using System.Collections;
+using Firebase.Unity.Editor;
 using UnityEngine.Networking;
+using System.Collections.Generic;
 
 public class FirebaseHandler : MonoBehaviour {
 
+    [HideInInspector]
     public static FirebaseHandler instanceFirebHandler;
 
+    [HideInInspector]
     public string myToken = "";
 
+    [HideInInspector]
+    public string friendToken = "";
+
+    [HideInInspector]
     public int secretCode = -1;
 
+    [HideInInspector]
     public bool amITheMaster = false;
+
+    [HideInInspector]
     public bool haveICr8edRoom = false;
+
+    DatabaseReference refFirebaseDB;
 
     private void Awake()
     {
@@ -25,6 +40,46 @@ public class FirebaseHandler : MonoBehaviour {
     void Start () {
         Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
         Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
+
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://chatapp-c18dc.firebaseio.com/");
+
+        // Get the root reference location of the database.
+        refFirebaseDB = FirebaseDatabase.DefaultInstance.RootReference;
+    }
+
+    public void AddMeToDB()
+    {
+        // Set data on Firebase
+        refFirebaseDB.Child("users").Child(PhotonChatHandler.nickname).SetValueAsync(myToken);
+    }
+
+    public void GetFriendFromDB()
+    {
+        // Retrieve data from Firebase
+        FirebaseDatabase.DefaultInstance
+            .GetReference("users")
+            .GetValueAsync().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    // Handle the error...
+                    Log("Err with retreiving");
+                }
+                else if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
+                    // Do something with snapshot...
+
+                    foreach (KeyValuePair<string, object> item in snapshot.Value as Dictionary<string, object>)
+                    {
+                        if (item.Key != PhotonChatHandler.nickname)
+                        {
+                            Log("friend token should be: " + item.Value);
+                            UIHandler.instanceUIHandler.friendToken.text = item.Value.ToString();
+                        }
+                    }
+                }
+            });
     }
 
     public void OnTokenReceived(object sender, Firebase.Messaging.TokenReceivedEventArgs token)
@@ -83,7 +138,7 @@ public class FirebaseHandler : MonoBehaviour {
         string dataMsg = "{ \"data\" : " +
             "{" +
             "\"meetMe@\":\"" + secretCode + "\"," +
-            "\"AmITheMaster\":\"" + amITheMaster + "\"" +
+            "\"AmITheMaster\":\"" + amITheMaster + "\"," +
             "\"HaveICr8edRoom\":\"" + haveICr8edRoom + "\"" +
             "}," +
             " \"to\" : \"" + to + "\" }";
