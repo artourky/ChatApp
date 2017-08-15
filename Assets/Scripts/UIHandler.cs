@@ -52,6 +52,7 @@ public class UIHandler : MonoBehaviour {
         Log("Answering Chat Request");
 
         // TODO: Reply to the (Caller) and let them that you are here // or should i just cr8 the room and w8 for them to join??
+        StartCoroutine(FirebaseHandler.instanceFirebHandler.SendHttpReq(/* HERE SHOULD BE THE FireBase Token */"", null, false));
     }
 
     void Log(string msg)

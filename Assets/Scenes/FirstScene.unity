@@ -312,7 +312,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &221450210
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1745,12 +1745,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1063892462}
-        m_MethodName: 
+      - m_Target: {fileID: 1063892463}
+        m_MethodName: AnswerChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2283,7 +2283,7 @@ MonoBehaviour:
   firebaseToken: {fileID: 425078530}
   friendToken: {fileID: 691367652}
   callHim: {fileID: 1001083591}
-  answerChat: {fileID: 0}
+  answerChat: {fileID: 920666541}
 --- !u!4 &1063892464
 Transform:
   m_ObjectHideFlags: 0

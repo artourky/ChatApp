@@ -56,8 +56,9 @@ public class PhotonChatHandler : MonoBehaviour {
 	void Update () {
         connectionState.text = PhotonNetwork.connectionStateDetailed.ToString();
 
-        Log("Connection State: " + PhotonNetwork.connectionStateDetailed.ToString());
-        Log("Am I the Master Client? " + PhotonNetwork.isMasterClient);
+        //// WARNING: CROWDED CONSOLE!
+        //Log("Connection State: " + PhotonNetwork.connectionStateDetailed.ToString());
+        //Log("Am I the Master Client? " + PhotonNetwork.isMasterClient);
 
         if (!amIConnected && PhotonNetwork.connectedAndReady)
         {

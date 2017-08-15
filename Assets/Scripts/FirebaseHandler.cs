@@ -37,7 +37,22 @@ public class FirebaseHandler : MonoBehaviour {
 
     public void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
     {
-        Log("Received a new message from: " + e.Message.From + " and the Message is I hope: " + e.Message.Data["meetMe@"]);
+        //Log("Received a new message from: " + e.Message.From + " and the Message is I hope: " + e.Message.Data["meetMe@"]);
+        
+        // e.Message.From << I HOPE IT'S The Firebase Token
+
+        // Receieved a Challenge
+        if (bool.Parse(e.Message.Data["AmITheMaster"]))
+        {
+            secretCode = int.Parse(e.Message.Data["meetMe@"]);
+
+            UIHandler.instanceUIHandler.answerChat.gameObject.SetActive(true);
+        }
+        // Received a Response
+        else if (!bool.Parse(e.Message.Data["AmITheMaster"]))
+        {
+            // TODO: Check 'secretCode' and then... cr8 room and send a signal again to let him join
+        }
     }
 
     public IEnumerator SendHttpReq(string to, string message, bool IsItANotification)
@@ -45,11 +60,15 @@ public class FirebaseHandler : MonoBehaviour {
         UnityWebRequest www = new UnityWebRequest("https://fcm.googleapis.com/fcm/send", "POST");
 
         /* 
-         * // Sending a notification message
+         * // Sending a notification and data message
          * {
          *   "to" : "bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1...",
          *   "notification" : {
          *     ...
+         *   },
+         *   "data" : {
+         *      "customKey" : "customValue",
+         *      ...
          *   }
          * }
          **/
