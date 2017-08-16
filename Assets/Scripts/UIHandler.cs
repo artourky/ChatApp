@@ -57,7 +57,8 @@ public class UIHandler : MonoBehaviour {
 
         FirebaseHandler.instanceFirebHandler.secretCode = Random.Range(0, 256);
         FirebaseHandler.instanceFirebHandler.amITheMaster = true;
-        StartCoroutine(FirebaseHandler.instanceFirebHandler.SendHttpReq(FirebaseHandler.instanceFirebHandler.friendToken, null, false));
+        StartCoroutine(FirebaseHandler.instanceFirebHandler
+            .SendHttpReq(FirebaseHandler.instanceFirebHandler.friendToken, "", false));
     }
 
     public void AnswerChat()
@@ -65,7 +66,7 @@ public class UIHandler : MonoBehaviour {
         Log("Answering Chat Request");
 
         // TODO: Reply to the (Caller) and let them that you are here // or should i just cr8 the room and w8 for them to join??
-        StartCoroutine(FirebaseHandler.instanceFirebHandler.SendHttpReq(/* HERE SHOULD BE THE FireBase Token */"", null, false));
+        StartCoroutine(FirebaseHandler.instanceFirebHandler.SendHttpReq(FirebaseHandler.instanceFirebHandler.friendToken, null, false));
     }
 
     void Log(string msg)

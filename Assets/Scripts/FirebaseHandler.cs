@@ -53,6 +53,9 @@ public class FirebaseHandler : MonoBehaviour {
         refFirebaseDB.Child("users").Child(PhotonChatHandler.nickname).SetValueAsync(myToken);
     }
 
+    /// <summary>
+    /// Getting Friend from Database
+    /// </summary>
     public void GetFriendFromDB()
     {
         // Retrieve data from Firebase
@@ -75,7 +78,8 @@ public class FirebaseHandler : MonoBehaviour {
                         if (item.Key != PhotonChatHandler.nickname)
                         {
                             Log("friend token should be: " + item.Value);
-                            UIHandler.instanceUIHandler.friendToken.text = item.Value.ToString();
+                            friendToken = item.Value.ToString();
+                            UIHandler.instanceUIHandler.friendToken.text = friendToken;
                         }
                     }
                 }
@@ -93,20 +97,23 @@ public class FirebaseHandler : MonoBehaviour {
     public void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
     {
         //Log("Received a new message from: " + e.Message.From + " and the Message is I hope: " + e.Message.Data["meetMe@"]);
-        
-        // e.Message.From << I HOPE IT'S The Firebase Token
 
-        // Receieved a Challenge
-        if (bool.Parse(e.Message.Data["AmITheMaster"]))
-        {
-            secretCode = int.Parse(e.Message.Data["meetMe@"]);
+        // e.Message.From << I HOPE IT'S The Firebase Token << It's NOT :(( Firebase Token will be e.Message.Data["FBT"]
 
-            UIHandler.instanceUIHandler.answerChat.gameObject.SetActive(true);
-        }
-        // Received a Response
-        else if (!bool.Parse(e.Message.Data["AmITheMaster"]))
+        if (e.Message.Data["FBT"] != "")
         {
-            // TODO: Check 'secretCode' and then... cr8 room and send a signal again to let him join
+            // Receieved a Challenge
+            if (bool.Parse(e.Message.Data["AmITheMaster"]))
+            {
+                secretCode = int.Parse(e.Message.Data["meetMe@"]);
+
+                UIHandler.instanceUIHandler.answerChat.gameObject.SetActive(true);
+            }
+            // Received a Response
+            else if (!bool.Parse(e.Message.Data["AmITheMaster"]))
+            {
+                // TODO: Check 'secretCode' and then... cr8 room and send a signal again to let him join
+            } 
         }
     }
 
@@ -131,24 +138,26 @@ public class FirebaseHandler : MonoBehaviour {
         string notificationMsg = "{ \"notification\" : " +
             "{ \"body\" : \"" + message + "\"," +
             " \"sound\" : \"default\"," +
-            " \"icon\":\"myicon\"" +
+            " \"icon\" : \"myicon\"" +
             " }," +
             " \"to\" : \"" + to + "\" }";
 
         string dataMsg = "{ \"data\" : " +
-            "{" +
-            "\"meetMe@\":\"" + secretCode + "\"," +
-            "\"AmITheMaster\":\"" + amITheMaster + "\"," +
-            "\"HaveICr8edRoom\":\"" + haveICr8edRoom + "\"" +
-            "}," +
+            "{ \"meetMe@\" : \"" + secretCode + "\"," +
+            " \"AmITheMaster\" : \"" + amITheMaster.ToString().ToLower() + "\"," +
+            " \"HaveICr8edRoom\" : \"" + haveICr8edRoom.ToString().ToLower() + "\"," +
+            " \"FBT\" : \"" + to + "\"" +
+            " }," +
             " \"to\" : \"" + to + "\" }";
 
         if (IsItANotification)
         {
+            Log("notf: " + notificationMsg);
             www.uploadHandler = new UploadHandlerRaw(new System.Text.UTF8Encoding().GetBytes(notificationMsg));
         }
         else
         {
+            Log("data: " + dataMsg);
             www.uploadHandler = new UploadHandlerRaw(new System.Text.UTF8Encoding().GetBytes(dataMsg));
         }
 
