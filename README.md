@@ -8,6 +8,6 @@
 - It's a chatting app using Photon and Firebase.
 - If you built it on a device and want to see Console: Draw a circle with your finger on the screen a couple of times.
 - Currently it's unstable and it might kick you out of the room.
-- This app uses Firebase SDK for Unity so in case my Firebase account you only need to replace "google-services.json" with your own, You can get one by creating a project https://firebase.google.com
+- This app uses Firebase SDK for Unity so in case my Firebase account you only need to replace "google-services.json" with your own, You can get one by creating a project https://firebase.google.com, also replace Firebase Database URL at Assets/FirebaseHandler.cs with your own.
 
 #Arsh @14/8/2017
