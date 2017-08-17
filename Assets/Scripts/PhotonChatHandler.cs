@@ -35,9 +35,28 @@ public class PhotonChatHandler : MonoBehaviour {
 
     public static void ConnectToPhoton()
     {
+        print("I'm connecting to photon!");
         PhotonNetwork.ConnectUsingSettings("v0.0.1");
     }
     
+    void OnConnectedToMaster()
+    {
+        Log("I'm connected!");
+
+        if (FirebaseHandler.instanceFirebHandler.amITheMaster)
+        {
+            PhotonNetwork.CreateRoom(FirebaseHandler.instanceFirebHandler.myToken);
+
+            roomCreatedby.text = "Room created by: Me!"; 
+        }
+        else
+        {
+            PhotonNetwork.JoinRoom(FirebaseHandler.instanceFirebHandler.friendToken);
+        }
+
+        UIHandler.instanceUIHandler.RemoveUI();
+    }
+
     void Awake()
     {
         //// WARNING: CROWDED CONSOLE!
@@ -114,6 +133,16 @@ public class PhotonChatHandler : MonoBehaviour {
         Log("Joined A Room!");
         roomName.text = "eu/" + PhotonNetwork.room.Name;
 
+        if (FirebaseHandler.instanceFirebHandler.secretCode != -1)
+        {
+            // Tell the other guy to Join
+            FirebaseHandler.instanceFirebHandler.haveICr8edRoom = true;
+            StartCoroutine(FirebaseHandler.instanceFirebHandler
+                .SendHttpReq(FirebaseHandler.instanceFirebHandler.friendToken, "", false));
+
+            joinOrLeaveRoom.GetComponentInChildren<Text>().text = "Leave Room";
+        }
+
         if (roomCreatedby.text == "")
         {
             roomCreatedby.text = "Room created by: Someone else!";
@@ -160,13 +189,13 @@ public class PhotonChatHandler : MonoBehaviour {
         msgsNumber++;
         Log("Sending A Message!");
         Log("Input Field text: " + myMsg.text);
-        scrollText.text = scrollText.text + "\n[Me] " + myMsg.text;
-        photonView.RPC("YoOthers", PhotonTargets.Others, myMsg.text);
+        scrollText.text = scrollText.text + "\n[" + (nickname == "" ? "Me" : nickname) + "] " + myMsg.text;
+        photonView.RPC("YoOthers", PhotonTargets.Others, nickname, myMsg.text);
         myMsg.text = "";
     }
 
     [PunRPC]
-    public void YoOthers(string msg)
+    public void YoOthers(string otherNickname, string msg)
     {
         //newMail++;
         //otherMsg = "You've got " + newMail + " mail(s).";
@@ -175,7 +204,7 @@ public class PhotonChatHandler : MonoBehaviour {
 
         msgsNumber++;
         Log("I received a msg!");
-        scrollText.text = scrollText.text + "\n[Other] " + msg;
+        scrollText.text = scrollText.text + "\n[" + (otherNickname == "" ? "Other" : otherNickname) + "] " + msg;
     }
 
     [PunRPC]

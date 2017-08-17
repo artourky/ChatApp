@@ -47,7 +47,7 @@ public class UIHandler : MonoBehaviour {
     {
         Log("Friend Chat woah");
 
-        FirebaseHandler.instanceFirebHandler.GetFriendFromDB();
+        //FirebaseHandler.instanceFirebHandler.GetFriendFromDB(friendToken.text);
         hideMe.SetActive(true);
     }
 
@@ -55,10 +55,11 @@ public class UIHandler : MonoBehaviour {
     {
         Log("Calling the friend " + friendToken.text);
 
+        FirebaseHandler.instanceFirebHandler.GetFriendFromDB(friendToken.text);
         FirebaseHandler.instanceFirebHandler.secretCode = Random.Range(0, 256);
         FirebaseHandler.instanceFirebHandler.amITheMaster = true;
-        StartCoroutine(FirebaseHandler.instanceFirebHandler
-            .SendHttpReq(FirebaseHandler.instanceFirebHandler.friendToken, "", false));
+        //StartCoroutine(FirebaseHandler.instanceFirebHandler
+        //    .SendHttpReq(FirebaseHandler.instanceFirebHandler.friendToken, "", false));
     }
 
     public void AnswerChat()
@@ -66,7 +67,15 @@ public class UIHandler : MonoBehaviour {
         Log("Answering Chat Request");
 
         // TODO: Reply to the (Caller) and let them that you are here // or should i just cr8 the room and w8 for them to join??
-        StartCoroutine(FirebaseHandler.instanceFirebHandler.SendHttpReq(FirebaseHandler.instanceFirebHandler.friendToken, null, false));
+        StartCoroutine(FirebaseHandler.instanceFirebHandler
+            .SendHttpReq(FirebaseHandler.instanceFirebHandler.friendToken, "", false));
+    }
+
+    public void RemoveUI()
+    {
+        Log("Removing UI");
+
+        welcomePanel.SetActive(false);
     }
 
     void Log(string msg)

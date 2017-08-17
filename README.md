@@ -1,5 +1,9 @@
+- Okay, Users can chat with each other as intended.
+- Friends can chat to each other if they know the nickname. 
+- Still need some UX refining and handling the sudden loggin out. #Arsh @17/8/2017
+
 - Solved the issue of registeration. 
-- 'Answer Chat' button now appears but not fully functional yet. #Arsh 16/8/2017
+- "Answer Chat" button now appears but not fully functional yet. #Arsh @16/8/2017
 
 - Two devices should now be able to send and respond to each other. 
 - Now I get a "Missing Registeration" everytime i try to send a firebase message. #Arsh @15/8/2017

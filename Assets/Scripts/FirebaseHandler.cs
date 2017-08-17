@@ -56,7 +56,7 @@ public class FirebaseHandler : MonoBehaviour {
     /// <summary>
     /// Getting Friend from Database
     /// </summary>
-    public void GetFriendFromDB()
+    public void GetFriendFromDB(string friendName)
     {
         // Retrieve data from Firebase
         FirebaseDatabase.DefaultInstance
@@ -75,11 +75,12 @@ public class FirebaseHandler : MonoBehaviour {
 
                     foreach (KeyValuePair<string, object> item in snapshot.Value as Dictionary<string, object>)
                     {
-                        if (item.Key != PhotonChatHandler.nickname)
+                        if (item.Key == friendName)
                         {
                             Log("friend token should be: " + item.Value);
                             friendToken = item.Value.ToString();
-                            UIHandler.instanceUIHandler.friendToken.text = friendToken;
+                            //UIHandler.instanceUIHandler.friendToken.text = friendToken;
+                            StartCoroutine(SendHttpReq(friendToken, "", false));
                         }
                     }
                 }
@@ -98,22 +99,46 @@ public class FirebaseHandler : MonoBehaviour {
     {
         //Log("Received a new message from: " + e.Message.From + " and the Message is I hope: " + e.Message.Data["meetMe@"]);
 
-        // e.Message.From << I HOPE IT'S The Firebase Token << It's NOT :(( Firebase Token will be e.Message.Data["FBT"]
+        // e.Message.From << I HOPE IT'S The Firebase Token << It's NOT :(( Firebase Token will be e.Message.Data["myOwnFBT"]
 
-        if (e.Message.Data["FBT"] != "")
+        if (e.Message.Data["myOwnFBT"] != "")
         {
-            // Receieved a Challenge
+            friendToken = e.Message.Data["myOwnFBT"];
+            Log("I've received a msg from: " + friendToken);
+            // Receieved a Challenge && Am I The slave ??
             if (bool.Parse(e.Message.Data["AmITheMaster"]))
             {
+                // Was the room created, Can I join now?
+                if (bool.Parse(e.Message.Data["HaveICr8edRoom"]) && !PhotonNetwork.inRoom)
+                {
+                    Log("Joining the Chat");
+
+                    PhotonChatHandler.ConnectToPhoton();
+                    return;
+                }
+
                 secretCode = int.Parse(e.Message.Data["meetMe@"]);
 
+                Log("Receieved a Challenge");
                 UIHandler.instanceUIHandler.answerChat.gameObject.SetActive(true);
             }
-            // Received a Response
+            // Received a Response && I'm the Master && also Did I already create a room
             else if (!bool.Parse(e.Message.Data["AmITheMaster"]))
             {
                 // TODO: Check 'secretCode' and then... cr8 room and send a signal again to let him join
-            } 
+                Log("Got a response");
+
+                if (int.Parse(e.Message.Data["meetMe@"]) == secretCode)
+                {
+                    Log("Right Secret Code!");
+
+                    PhotonChatHandler.ConnectToPhoton();
+                }
+                else
+                {
+                    Log("Wrong Secret Code!");
+                }
+            }
         }
     }
 
@@ -146,7 +171,7 @@ public class FirebaseHandler : MonoBehaviour {
             "{ \"meetMe@\" : \"" + secretCode + "\"," +
             " \"AmITheMaster\" : \"" + amITheMaster.ToString().ToLower() + "\"," +
             " \"HaveICr8edRoom\" : \"" + haveICr8edRoom.ToString().ToLower() + "\"," +
-            " \"FBT\" : \"" + to + "\"" +
+            " \"myOwnFBT\" : \"" + myToken + "\"" +
             " }," +
             " \"to\" : \"" + to + "\" }";
 
