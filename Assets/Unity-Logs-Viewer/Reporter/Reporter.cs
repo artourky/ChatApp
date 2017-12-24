@@ -2010,9 +2010,10 @@ public class Reporter : MonoBehaviour
 			url = System.IO.Path.Combine(streamingAssetsPath, prefFile);
 		}
 
-		if (Application.platform != RuntimePlatform.OSXWebPlayer && Application.platform != RuntimePlatform.WindowsWebPlayer)
-			if (!url.Contains("://"))
-				url = "file://" + url;
+		// The following lines produces an error with Unity 2017.2
+		//if (Application.platform != RuntimePlatform.OSXWebPlayer && Application.platform != RuntimePlatform.WindowsWebPlayer)
+			//if (!url.Contains("://"))
+				//url = "file://" + url;
 
 
 		// float startTime = Time.realtimeSinceStartup;

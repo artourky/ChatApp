@@ -1,3 +1,6 @@
+* Added a little something to test what will happen if a Data message was sent from Firebase console _(It worked)_.
+* Upgraded to **Unity 2017.2**. #Arsh @24/12/2017
+
 * If you entered a nickname that was already in Database, you'll simply take his place.
 * There's a problem with the fonts. #Arsh @21/8/2017
 
@@ -11,14 +14,14 @@
 * Two devices should now be able to send and respond to each other. 
 * Now I get a "Missing Registeration" everytime i try to send a firebase message. #Arsh @15/8/2017
 
-* You can send a data or notification to a certain user. 
+* You can send a data or notification to a certain user.
 * I've had an idea on minimizing the work to create a room. #Arsh @14/8/2017
 
 # Basic Info
 * It's a chatting app using Photon and Firebase.
-* If you built it on a device and want to see Console: Draw a circle with your finger on the screen a couple of times.
+* If you built it on a device and want to see Logs; Draw a circle with your finger on the screen for a couple of times.
 * Currently it's unstable and it might kick you out of the room.
-* This app uses Firebase SDK for Unity so in case my Firebase account you only need to replace "google-services.json" with your own, You can get one by creating a project https://firebase.google.com, also replace **Firebase Database URL** at _Assets/Scripts/FirebaseHandler.cs_ with your own.
+* This app uses Firebase SDK for Unity so in case my Firebase account you only need to replace "google-services.json" with your own, You can get one by creating a project https://firebase.google.com, also replace **Firebase Database URL** at __Assets/Scripts/FirebaseHandler.cs__ with your own.
 * There's always an APK that has the latest stuff.
 
 #Arsh @14/8/2017

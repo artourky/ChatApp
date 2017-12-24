@@ -137,6 +137,9 @@ public class FirebaseHandler : MonoBehaviour {
                 else
                 {
                     Log("Wrong Secret Code!");
+
+					// Testing if we can send a Data message from Firebase console
+					Log("[\"meetMe@\"] contains " + e.Message.Data["meetMe@"]);
                 }
             }
         }
